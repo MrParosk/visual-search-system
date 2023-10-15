@@ -9,7 +9,9 @@ import torch
 from collections import defaultdict
 
 
-image_dataset_path = "/home/erik/code/git/visual-search-system/data/caltech-101"
+#image_dataset_path = "/home/erik/code/git/visual-search-system/data/caltech-101"
+image_dataset_path = "/home/user/data/caltech-101"
+
 
 def get_classes(image_dataset_path):
     classes = []
