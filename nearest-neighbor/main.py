@@ -22,9 +22,9 @@ def load_transform_image(image_path):
     return image
 
 
-model = torch.load("../artifact/model.pt")
+model = torch.load("/home/user/artifact/model.pt")
 
-files = glob.glob("../data/caltech-101/**/*.jpg")
+files = glob.glob("/home/user/data/caltech-101/**/*.jpg")
 
 crop = RandomCrop(size=(250, 250), pad_if_needed=True)
 
@@ -34,7 +34,7 @@ std = torch.Tensor([0.229, 0.224, 0.225]).view((3, 1, 1))
 index = faiss.IndexFlatIP(64)
 
 with torch.no_grad():
-    for file in files[0:100]:
+    for file in files[0:1000]:
         img_array = load_transform_image(file)
 
         embedding = model.forward_embedding(img_array)
@@ -43,4 +43,4 @@ with torch.no_grad():
         index.add(embedding)
 
 
-faiss.write_index(index, "../artifact/index.fs")
+faiss.write_index(index, "/home/user/artifact/index.fs")
