@@ -97,5 +97,7 @@ for epoch in range(num_epochs):
     print(f"Val accuracy: {epoch_val_acc:.4f}")
 
 
+model = model.cpu()
 scripted_module = torch.jit.script(model)
-scripted_module.save("./model.pt")
+scripted_module.save("/home/user/artifact/model.pt")
+

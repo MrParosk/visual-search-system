@@ -73,7 +73,7 @@ class CalTechDataset(Dataset):
         image = CalTechDataset.gray_to_rgb(image)
         image = self.crop(image)
         image = image / 255.0
-        #image = (image - self.mean) / self.std
+        image = (image - self.mean) / self.std
         image = image.unsqueeze(0)
         return image
 

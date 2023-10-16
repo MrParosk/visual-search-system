@@ -9,6 +9,7 @@ docker run \
     --shm-size=2G \
     -v $(pwd):/home/user/ \
     -v $(pwd)/../data:/home/user/data \
+    -v $(pwd)/../artifact:/home/user/artifact \
     -it \
     training_container:latest \
     bash
