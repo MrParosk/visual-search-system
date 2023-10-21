@@ -1,12 +1,13 @@
 from pathlib import Path
-import matplotlib.pyplot as plt
 import random
+from collections import defaultdict
 
+import torch
 from torchvision import io
 from torch.utils.data import Dataset
-from torchvision.transforms import RandomCrop
-import torch
-from collections import defaultdict
+import matplotlib.pyplot as plt
+
+from image_transforms import get_transforms
 
 
 image_dataset_path = "/home/user/data/caltech-101"
@@ -38,7 +39,8 @@ def plot_example_images(image_dataset_path, nrows=2, ncols=2):
 
 
 class CalTechDataset(Dataset):
-    def __init__(self, image_dataset_path, crop_size=(250, 250), frac_positive = 0.3):
+    def __init__(self, image_dataset_path, transforms, frac_positive = 0.3):
+        self.transforms = transforms
         self.frac_positive = frac_positive
 
         self.classes = get_classes(image_dataset_path)
@@ -53,28 +55,12 @@ class CalTechDataset(Dataset):
                 self.images_paths.append({"class": c, "path": str(p)})
                 self.class_to_image[c].append(str(p))
 
-        self.crop = RandomCrop(crop_size, pad_if_needed=True)
-
-        self.mean = torch.Tensor([0.485, 0.456, 0.406]).view((3, 1, 1))
-        self.std = torch.Tensor([0.229, 0.224, 0.225]).view((3, 1, 1))
-
     def __len__(self):
         return len(self.images_paths)
 
-    @staticmethod
-    def gray_to_rgb(image_array):
-        if image_array.shape[0] == 1:
-            image_array = image_array.repeat(3, 1, 1)
-
-        return image_array
-
     def load_transform_image(self, image_path):
         image = io.read_image(image_path)
-        image = CalTechDataset.gray_to_rgb(image)
-        image = self.crop(image)
-        image = image / 255.0
-        image = (image - self.mean) / self.std
-        image = image.unsqueeze(0)
+        image = self.transforms(image)
         return image
 
     def get_idx_and_context_image(self, idx):
@@ -108,7 +94,8 @@ class CalTechDataset(Dataset):
 
 
 if __name__ == "__main__":
-    ds = CalTechDataset(image_dataset_path)
+    transforms = get_transforms()
+    ds = CalTechDataset(image_dataset_path, transforms)
 
     nrows = 5
     fig, ax = plt.subplots(nrows=nrows, ncols=2)

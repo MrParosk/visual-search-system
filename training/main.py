@@ -5,11 +5,13 @@ import torch.nn as nn
 
 from dataset import CalTechDataset, image_dataset_path
 from model import EmbeddingModel, accuracy
+from image_transforms import get_transforms
 
+
+transforms = get_transforms()
+ds = CalTechDataset(image_dataset_path, transforms)
 
 train_size = 0.8
-ds = CalTechDataset(image_dataset_path)
-batch_size = 128
 
 #This causes data-leakage but since the training part is not the central
 # topic of this system design, will skip it
@@ -20,6 +22,9 @@ train_ds, val_ds = random_split(
         len(ds) - int(train_size * len(ds))
     ]
 )
+
+
+batch_size = 128
 
 
 train_loader = DataLoader(
@@ -41,7 +46,7 @@ val_loader = DataLoader(
 
 lr = 1e-2
 device = "cuda"
-num_epochs = 5
+num_epochs = 1
 
 model = EmbeddingModel()
 model.change_freezing(False)
@@ -98,6 +103,8 @@ for epoch in range(num_epochs):
 
 
 model = model.cpu()
-scripted_module = torch.jit.script(model)
-scripted_module.save("/home/user/artifact/model.pt")
+scripted_model = torch.jit.script(model)
+scripted_model.save("/home/user/artifact/model.pt")
 
+scripted_transforms = torch.jit.script(transforms)
+scripted_transforms.save("/home/user/artifact/transforms.pt")
