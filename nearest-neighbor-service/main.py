@@ -1,6 +1,6 @@
 import uuid
-import json
 import os
+import glob
 
 from torchvision import io
 import torch
@@ -8,18 +8,17 @@ import faiss
 from fastapi import FastAPI, File, UploadFile
 
 
-IMAGEDIR = "fastapi-images/"
+IMAGEDIR = "/home/user/"
 
-model = torch.jit.load("../artifact/model.pt")
-transforms = torch.jit.load("../artifact/transforms.pt")
-index = faiss.read_index("../artifact/index.fs")
+model = torch.jit.load("/home/user/artifact/model.pt")
+transforms = torch.jit.load("/home/user/artifact/transforms.pt")
+index = faiss.read_index("/home/user/artifact/index.fs")
 
-with open("../artifact/image_files.json", "r") as fp:
-    files = json.load(fp)
+
+files = glob.glob("/home/user/data/caltech-101/**/*.jpg")
 
 
 app = FastAPI()
-# pip install fastapi, python-multipart
 
 @app.post("/images/")
 async def create_upload_file(file: UploadFile = File(...)):

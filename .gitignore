@@ -1,0 +1,5 @@
+artifact/model.pt
+artifact/transforms.pt
+artifact/index.fs
+**/__pycache__
+**/.venv

@@ -18,7 +18,7 @@ with open(filename, "rb") as fp:
 files = {"file": (filename, img_byte_arr)}
 
 response = requests.post(
-    "http://127.0.0.1:8000/images",
+    "http://0.0.0.0:8080/images",
     files=files,
 )
 

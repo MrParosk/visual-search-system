@@ -46,7 +46,7 @@ val_loader = DataLoader(
 
 lr = 1e-2
 device = "cuda"
-num_epochs = 1
+num_epochs = 20
 
 model = EmbeddingModel()
 model.change_freezing(False)
