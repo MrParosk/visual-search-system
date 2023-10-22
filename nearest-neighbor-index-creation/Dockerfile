@@ -4,4 +4,4 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN pip install faiss-cpu==1.7.4
 
-WORKDIR /home/user/
+WORKDIR /home/user/workdir/
