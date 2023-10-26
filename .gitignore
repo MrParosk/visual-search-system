@@ -1,5 +1,8 @@
 artifact/model.pt
 artifact/transforms.pt
 artifact/index.fs
+data/caltech-101.zip
+data/caltech-101
+data/old
 **/__pycache__
 **/.venv
